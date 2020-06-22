@@ -1,5 +1,5 @@
 import * as firebase from 'firebase';
-import {computed, getCurrentInstance, onUnmounted, ref, shallowRef, watchEffect,} from '@vue/composition-api';
+import {computed, getCurrentInstance, onUnmounted, shallowRef, watchEffect,} from '@vue/composition-api';
 import {isFunction, Optional, Supplier} from './utils';
 import {SubDocumentManager} from './SubDocumentManager';
 import DocumentReference = firebase.firestore.DocumentReference;

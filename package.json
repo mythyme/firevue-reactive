@@ -23,6 +23,7 @@
     "gts": "^2.0.2",
     "typescript": "^3.8.3",
     "@types/node": "^13.11.1",
+    "@vue/composition-api": "^0.6.5",
     "firebase": "^7.15.3",
     "vue": "^2.6.11"
   },
