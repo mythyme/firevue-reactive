@@ -1,5 +1,11 @@
 import * as firebase from 'firebase';
-import {computed, getCurrentInstance, onUnmounted, shallowRef, watchEffect,} from '@vue/composition-api';
+import {
+  computed,
+  getCurrentInstance,
+  onUnmounted,
+  shallowRef,
+  watchEffect,
+} from '@vue/composition-api';
 import {isFunction, Optional, Supplier} from './utils';
 import {SubDocumentManager} from './SubDocumentManager';
 import DocumentReference = firebase.firestore.DocumentReference;
@@ -12,12 +18,10 @@ export function reactiveDocument(
   docRefSupplier: Supplier<Optional<DocumentReferenceLike>>,
   subscribe = false
 ) {
-
   const loadingRef = shallowRef(false);
   const snapshotRef = shallowRef<Optional<DocumentSnapshot>>(undefined);
   const dataRef = shallowRef<Optional<DocumentData>>(undefined);
   const errorRef = shallowRef<Optional<Error>>(undefined);
-
 
   // Create a computed property, if the supplier is reactive then when it changes this will also change
   const docRefTrigger = computed(() => {
@@ -37,11 +41,11 @@ export function reactiveDocument(
   let unsubscribe: null | (() => void) = null;
 
   const resetFields = ({
-                         error,
-                         data,
-                         snapshot,
-                         loading,
-                       }: {
+    error,
+    data,
+    snapshot,
+    loading,
+  }: {
     error?: Error;
     loading?: boolean;
     snapshot?: DocumentSnapshot;
@@ -71,7 +75,8 @@ export function reactiveDocument(
 
   // Watch the trigger for changes to the DocumentReference we are tracking
   let disconnected = false;
-  const stopHandle = watchEffect(() => {
+  const stopHandle = watchEffect(
+    () => {
       if (disconnected) return;
 
       const docRef = docRefTrigger.value as DocumentReference;
@@ -122,10 +127,10 @@ export function reactiveDocument(
   ///////////////////
   // Exposed values
 
-  const loading = computed(() => loadingRef.value)
-  const snapshot = computed(() => snapshotRef.value)
-  const data = computed(() => dataRef.value)
-  const error = computed(() => errorRef.value)
+  const loading = computed(() => loadingRef.value);
+  const snapshot = computed(() => snapshotRef.value);
+  const data = computed(() => dataRef.value);
+  const error = computed(() => errorRef.value);
 
   return {
     loading,
@@ -135,12 +140,11 @@ export function reactiveDocument(
     get disconnected() {
       return disconnected;
     },
-    disconnect
-  }
+    disconnect,
+  };
 }
 
-export type ReactiveDocument = ReturnType<typeof reactiveDocument>
-
+export type ReactiveDocument = ReturnType<typeof reactiveDocument>;
 
 export function getOnce(docRef: DocumentReferenceLike): ReactiveDocument;
 export function getOnce(
@@ -152,9 +156,7 @@ export function getOnce(docRef: any): ReactiveDocument {
   return reactiveDocument(docRefSupplier, false);
 }
 
-export function watchDocument(
-  docRef: DocumentReferenceLike
-): ReactiveDocument;
+export function watchDocument(docRef: DocumentReferenceLike): ReactiveDocument;
 export function watchDocument(
   docRefSupplier: Supplier<DocumentReferenceLike>
 ): ReactiveDocument;
@@ -163,5 +165,3 @@ export function watchDocument(docRef: any): ReactiveDocument {
   const docRefSupplier = isFunction(docRef) ? docRef : () => docRef;
   return reactiveDocument(docRefSupplier, true);
 }
-
-

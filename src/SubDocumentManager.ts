@@ -11,7 +11,10 @@ export type Targeted = {target: ReactiveDocument};
 export function hasTarget(
   dref?: DocumentReference
 ): dref is DocumentReference & Targeted {
-  return !!dref && dref.hasOwnProperty(SUB_DOCUMENT_PROPERTY_NAME);
+  return (
+    !!dref &&
+    Object.prototype.hasOwnProperty.call(dref, SUB_DOCUMENT_PROPERTY_NAME)
+  );
 }
 
 interface SubDocumentCacheRecord {

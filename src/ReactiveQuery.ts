@@ -1,5 +1,11 @@
 import * as firebase from 'firebase';
-import {computed, getCurrentInstance, onUnmounted, shallowRef, watchEffect,} from '@vue/composition-api';
+import {
+  computed,
+  getCurrentInstance,
+  onUnmounted,
+  shallowRef,
+  watchEffect,
+} from '@vue/composition-api';
 import {SubDocumentManager} from './SubDocumentManager';
 import {DisconnectHandle, isFunction, Optional, Supplier} from './utils';
 import DocumentData = firebase.firestore.DocumentData;
@@ -39,17 +45,14 @@ export class QueryItem {
   }
 }
 
-
 export function reactiveQuery(
   queryRefSupplier: Supplier<Optional<QueryLike>>,
   subscribe = false
 ) {
-
   const loadingRef = shallowRef(false);
   const snapshotRef = shallowRef<Optional<QuerySnapshot>>(undefined);
   const itemsRef = shallowRef<QueryItem[]>([]);
   const errorRef = shallowRef<Optional<Error>>(undefined);
-
 
   // Create a computed property, if the supplier is reactive then when it changes this will also change
   const queryRefTrigger = computed(() => {
@@ -71,11 +74,11 @@ export function reactiveQuery(
   };
 
   const resetFields = ({
-                         error,
-                         items,
-                         snapshot,
-                         loading,
-                       }: {
+    error,
+    items,
+    snapshot,
+    loading,
+  }: {
     error?: Error;
     loading?: boolean;
     snapshot?: QuerySnapshot;
@@ -104,8 +107,9 @@ export function reactiveQuery(
 
   // Watch the trigger for changes to the QueryReference we are tracking
   let disconnected = false;
-  const stopHandle = watchEffect( () => {
-    if (disconnected) return;
+  const stopHandle = watchEffect(
+    () => {
+      if (disconnected) return;
 
       const queryRef = queryRefTrigger.value;
 
@@ -127,7 +131,7 @@ export function reactiveQuery(
 
       // Loading will be stopped in the handler
     },
-    { flush: 'sync' }
+    {flush: 'sync'}
   );
 
   // Set up the Disconnect handling
@@ -155,22 +159,32 @@ export function reactiveQuery(
   ///////////////////
   // Exposed values
 
-  const loading = computed(() => loadingRef.value)
-  const snapshot = computed(() => snapshotRef.value)
-  const items = computed(() => itemsRef.value)
-  const error = computed(() => errorRef.value)
+  const loading = computed(() => loadingRef.value);
+  const snapshot = computed(() => snapshotRef.value);
+  const items = computed(() => itemsRef.value);
+  const error = computed(() => errorRef.value);
 
   return {
-    get loading() { return loading; },
-    get snapshot() { return snapshot; },
-    get items() { return items; },
-    get error() { return error; },
-    get disconnected() { return disconnected;},
-    disconnect
-  }
+    get loading() {
+      return loading;
+    },
+    get snapshot() {
+      return snapshot;
+    },
+    get items() {
+      return items;
+    },
+    get error() {
+      return error;
+    },
+    get disconnected() {
+      return disconnected;
+    },
+    disconnect,
+  };
 }
 
-export type ReactiveQuery = ReturnType<typeof reactiveQuery>
+export type ReactiveQuery = ReturnType<typeof reactiveQuery>;
 
 export function queryOnce(query: QueryLike): ReactiveQuery;
 export function queryOnce(querySupplier: Supplier<QueryLike>): ReactiveQuery;
@@ -181,9 +195,7 @@ export function queryOnce(query: any): ReactiveQuery {
 }
 
 export function watchQuery(query: QueryLike): ReactiveQuery;
-export function watchQuery(
-  querySupplier: Supplier<QueryLike>
-): ReactiveQuery;
+export function watchQuery(querySupplier: Supplier<QueryLike>): ReactiveQuery;
 // eslint-disable @typescript-eslint/no-explicit-any
 export function watchQuery(query: any): ReactiveQuery {
   const querySupplier = isFunction(query) ? query : () => query;

@@ -33,4 +33,3 @@ export function isFunction(functionToCheck: any) {
     functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
   );
 }
-
