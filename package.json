@@ -1,6 +1,6 @@
 {
   "name": "firevue-reactive",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Firestore + Vue Library to link Firestore docs/queries to Vue 3 Composition API observables",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
